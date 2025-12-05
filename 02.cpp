@@ -8,7 +8,7 @@ public:
     Day02() {}
     ~Day02() {}
 
-    void sumInvalidIDs(std::string input_filename)
+    void sumInvalidIDs(std::string input_filename, bool part2)
     {
         std::vector<long long> ids = readIdsFromInput(input_filename);
         long long sum = 0;
@@ -17,10 +17,32 @@ public:
             for (long long i = ids[id_index]; i <= ids[id_index+1]; i++)
             {
                 std::string id_string = std::to_string(i);
-                if (id_string.substr(0, id_string.length()/2) == id_string.substr(id_string.length()/2, std::string::npos))
+                if (part2)
                 {
-                    sum += i;
-                    //std::cout << "invalid id found! " << i << std::endl;
+                    for (int j = 2; j <= id_string.length(); j++)
+                    {
+                        if (id_string.length()%j == 0)
+                        {
+                            int substring_length = id_string.length()/j;
+                            std::string comp = id_string.substr(0, substring_length);
+                            bool repeating = true;
+                            for (int k = 1; k < j; k++)
+                            {
+                                if (id_string.substr(substring_length*k, substring_length) != comp)
+                                    repeating = false;
+                            }
+                            if (repeating)
+                            {
+                                sum += i;
+                                break;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (id_string.substr(0, id_string.length()/2) == id_string.substr(id_string.length()/2, std::string::npos))
+                        sum += i;
                 }
             }
         }
@@ -52,6 +74,7 @@ private:
 int main()
 {
     Day02 day02;
-    day02.sumInvalidIDs("test_input.txt");
+    day02.sumInvalidIDs("02_input.txt", false);
+    day02.sumInvalidIDs("02_input.txt", true);
     return 0;
 }

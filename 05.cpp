@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <unordered_set>
 #include "FileReader.h"
 
 class Day05
@@ -28,6 +29,19 @@ public:
         }
 
         return count;
+    }
+
+    int countPossibleFreshIds()
+    {
+        std::unordered_set<int> possible_fresh_ids;
+        for (int i = 0; i < ranges.size(); i++)
+        {
+            for (int j = ranges[i].first; j <= ranges[i].second; j++)
+            {
+                possible_fresh_ids.insert(j);
+            }
+        }
+        return possible_fresh_ids.size();
     }
 
 private:
@@ -68,6 +82,7 @@ private:
 int main()
 {
     Day05 day05("05_input.txt");
-    std::cout << day05.countFreshIds() << std::endl;
+    std::cout << "part 1: " << day05.countFreshIds() << std::endl;
+    std::cout << "part 2: " << day05.countPossibleFreshIds() << std::endl;
     return 0;
 }
